@@ -37,8 +37,9 @@ from tkinter import *
 from tkinter.filedialog import askdirectory
 import os
 from queue import Queue
-
-
+import time
+import inspect
+import ctypes
 def selectPath():
     file = open('configg.txt', 'w')
     file.close()
@@ -67,13 +68,11 @@ def openPath():
     print(dir)
 
 
-def start_run1():
-        T = threading.Thread(target=start_run)
-        T.setDaemon(True)
-        T.start()
+
 
 def start_run():
-
+    if os.path.exists('configg2.txt'):
+        os.remove("configg2.txt")
 
     lockfile = None
     label1=tk.Label(root, text="Waiting for League of Legends to start ..").place(x=10, y=30, width=800, height=20)
@@ -157,8 +156,8 @@ def start_run():
         # Set to True to stop script when match starts
 
         ###############################################################################
-        champions = {"1":"Annie","2":"Olaf","3":"Galio","4":"Twisted Fate","5":"Xin Zhao","6":"Urgot","7":"LeBlanc","8":"Vladimir","9":"Fiddlesticks","10":"Kayle","11":"Master Yi","12":"Alistar","13":"Ryze","14":"Sion","15":"Sivir","16":"Soraka","17":"Teemo","18":"Tristana","19":"Warwick","20":"Nunu","21":"Miss Fortune","22":"Ashe","23":"Tryndamere","24":"Jax","25":"Morgana","26":"Zilean","27":"Singed","28":"Evelynn","29":"Twitch","30":"Karthus","31":"Cho\'Gath","32":"Amumu","33":"Rammus","34":"Anivia","35":"Shaco","36":"Dr. Mundo","37":"Sona","38":"Kassadin","39":"Irelia","40":"Janna","41":"Gangplank","42":"Corki","43":"Karma","44":"Taric","45":"Veigar","48":"Trundle","50":"Swain","51":"Caitlyn","53":"Blitzcrank","54":"Malphite","55":"Katarina","56":"Nocturne","57":"Maokai","58":"Renekton","59":"Jarvan IV","60":"Elise","61":"Orianna","62":"Wukong","63":"Brand","64":"Lee Sin","67":"Vayne","68":"Rumble","69":"Cassiopeia","72":"Skarner","74":"Heimerdinger","75":"Nasus","76":"Nidalee","77":"Udyr","78":"Poppy","79":"Gragas","80":"Pantheon","81":"Ezreal","82":"Mordekaiser","83":"Yorick","84":"Akali","85":"Kennen","86":"Garen","89":"Leona","90":"Malzahar","91":"Talon","92":"Riven","96":"Kog\'Maw","98":"Shen","99":"Lux","101":"Xerath","102":"Shyvana","103":"Ahri","104":"Graves","105":"Fizz","106":"Volibear","107":"Rengar","110":"Varus","111":"Nautilus","112":"Viktor","113":"Sejuani","114":"Fiora","115":"Ziggs","117":"Lulu","119":"Draven","120":"Hecarim","121":"Kha\'Zix","122":"Darius","126":"Jayce","127":"Lissandra","131":"Diana","133":"Quinn","134":"Syndra","136":"Aurelion Sol","141":"Kayn","142":"Zoe","143":"Zyra","145":"Kai\'Sa","150":"Gnar","154":"Zac","157":"Yasuo","161":"Vel\'Koz","163":"Taliyah","164":"Camille","201":"Braum","202":"Jhin","203":"Kindred","222":"Jinx","223":"Tahm Kench","236":"Lucian","238":"Zed","240":"Kled","245":"Ekko","254":"Vi","266":"Aatrox","267":"Nami","268":"Azir","412":"Thresh","420":"Illaoi","421":"Rek\'Sai","427":"Ivern","429":"Kalista","432":"Bard","497":"Rakan","498":"Xayah","516":"Ornn","555":"Pyke"} # ,"-1":"None"}
-        championNames = {"Annie":"1","Olaf":"2","Galio":"3","Twisted Fate":"4","Xin Zhao":"5","Urgot":"6","LeBlanc":"7","Vladimir":"8","Fiddlesticks":"9","Kayle":"10","Master Yi":"11","Alistar":"12","Ryze":"13","Sion":"14","Sivir":"15","Soraka":"16","Teemo":"17","Tristana":"18","Warwick":"19","Nunu":"20","Miss Fortune":"21","Ashe":"22","Tryndamere":"23","Jax":"24","Morgana":"25","Zilean":"26","Singed":"27","Evelynn":"28","Twitch":"29","Karthus":"30","Cho\'Gath":"31","Amumu":"32","Rammus":"33","Anivia":"34","Shaco":"35","Dr. Mundo":"36","Sona":"37","Kassadin":"38","Irelia":"39","Janna":"40","Gangplank":"41","Corki":"42","Karma":"43","Taric":"44","Veigar":"45","Trundle":"48","Swain":"50","Caitlyn":"51","Blitzcrank":"53","Malphite":"54","Katarina":"55","Nocturne":"56","Maokai":"57","Renekton":"58","Jarvan IV":"59","Elise":"60","Orianna":"61","Wukong":"62","Brand":"63","Lee Sin":"64","Vayne":"67","Rumble":"68","Cassiopeia":"69","Skarner":"72","Heimerdinger":"74","Nasus":"75","Nidalee":"76","Udyr":"77","Poppy":"78","Gragas":"79","Pantheon":"80","Ezreal":"81","Mordekaiser":"82","Yorick":"83","Akali":"84","Kennen":"85","Garen":"86","Leona":"89","Malzahar":"90","Talon":"91","Riven":"92","Kog\'Maw":"96","Shen":"98","Lux":"99","Xerath":"101","Shyvana":"102","Ahri":"103","Graves":"104","Fizz":"105","Volibear":"106","Rengar":"107","Varus":"110","Nautilus":"111","Viktor":"112","Sejuani":"113","Fiora":"114","Ziggs":"115","Lulu":"117","Draven":"119","Hecarim":"120","Kha\'Zix":"121","Darius":"122","Jayce":"126","Lissandra":"127","Diana":"131","Quinn":"133","Syndra":"134","Aurelion Sol":"136","Kayn":"141","Zoe":"142","Zyra":"143","Kai\'Sa":"145","Gnar":"150","Zac":"154","Yasuo":"157","Vel\'Koz":"161","Taliyah":"163","Camille":"164","Braum":"201","Jhin":"202","Kindred":"203","Jinx":"222","Tahm Kench":"223","Lucian":"236","Zed":"238","Kled":"240","Ekko":"245","Vi":"254","Aatrox":"266","Nami":"267","Azir":"268","Thresh":"412","Illaoi":"420","Rek\'Sai":"421","Ivern":"427","Kalista":"429","Bard":"432","Rakan":"497","Xayah":"498","Ornn":"516","Pyke":"555"}
+        champions = {'266': 'Aatrox', '103': 'Ahri', '84': 'Akali', '166': 'Akshan', '12': 'Alistar', '32': 'Amumu', '34': 'Anivia', '1': 'Annie', '523': 'Aphelios', '22': 'Ashe', '136': 'AurelionSol', '268': 'Azir', '432': 'Bard', '200': 'Belveth', '53': 'Blitzcrank', '63': 'Brand', '201': 'Braum', '51': 'Caitlyn', '164': 'Camille', '69': 'Cassiopeia', '31': 'Chogath', '42': 'Corki', '122': 'Darius', '131': 'Diana', '119': 'Draven', '36': 'DrMundo', '245': 'Ekko', '60': 'Elise', '28': 'Evelynn', '81': 'Ezreal', '9': 'Fiddlesticks', '114': 'Fiora', '105': 'Fizz', '3': 'Galio', '41': 'Gangplank', '86': 'Garen', '150': 'Gnar', '79': 'Gragas', '104': 'Graves', '887': 'Gwen', '120': 'Hecarim', '74': 'Heimerdinger', '420': 'Illaoi', '39': 'Irelia', '427': 'Ivern', '40': 'Janna', '59': 'JarvanIV', '24': 'Jax', '126': 'Jayce', '202': 'Jhin', '222': 'Jinx', '145': 'Kaisa', '429': 'Kalista', '43': 'Karma', '30': 'Karthus', '38': 'Kassadin', '55': 'Katarina', '10': 'Kayle', '141': 'Kayn', '85': 'Kennen', '121': 'Khazix', '203': 'Kindred', '240': 'Kled', '96': 'KogMaw', '7': 'Leblanc', '64': 'LeeSin', '89': 'Leona', '876': 'Lillia', '127': 'Lissandra', '236': 'Lucian', '117': 'Lulu', '99': 'Lux', '54': 'Malphite', '90': 'Malzahar', '57': 'Maokai', '11': 'MasterYi', '21': 'MissFortune', '62': 'MonkeyKing', '82': 'Mordekaiser', '25': 'Morgana', '267': 'Nami', '75': 'Nasus', '111': 'Nautilus', '518': 'Neeko', '76': 'Nidalee', '895': 'Nilah', '56': 'Nocturne', '20': 'Nunu', '2': 'Olaf', '61': 'Orianna', '516': 'Ornn', '80': 'Pantheon', '78': 'Poppy', '555': 'Pyke', '246': 'Qiyana', '133': 'Quinn', '497': 'Rakan', '33': 'Rammus', '421': 'RekSai', '526': 'Rell', '888': 'Renata', '58': 'Renekton', '107': 'Rengar', '92': 'Riven', '68': 'Rumble', '13': 'Ryze', '360': 'Samira', '113': 'Sejuani', '235': 'Senna', '147': 'Seraphine', '875': 'Sett', '35': 'Shaco', '98': 'Shen', '102': 'Shyvana', '27': 'Singed', '14': 'Sion', '15': 'Sivir', '72': 'Skarner', '37': 'Sona', '16': 'Soraka', '50': 'Swain', '517': 'Sylas', '134': 'Syndra', '223': 'TahmKench', '163': 'Taliyah', '91': 'Talon', '44': 'Taric', '17': 'Teemo', '412': 'Thresh', '18': 'Tristana', '48': 'Trundle', '23': 'Tryndamere', '4': 'TwistedFate', '29': 'Twitch', '77': 'Udyr', '6': 'Urgot', '110': 'Varus', '67': 'Vayne', '45': 'Veigar', '161': 'Velkoz', '711': 'Vex', '254': 'Vi', '234': 'Viego', '112': 'Viktor', '8': 'Vladimir', '106': 'Volibear', '19': 'Warwick', '498': 'Xayah', '101': 'Xerath', '5': 'XinZhao', '157': 'Yasuo', '777': 'Yone', '83': 'Yorick', '350': 'Yuumi', '154': 'Zac', '238': 'Zed', '221': 'Zeri', '115': 'Ziggs', '26': 'Zilean', '142': 'Zoe', '143': 'Zyra'}
+        championNames = {'Aatrox': '266', 'Ahri': '103', 'Akali': '84', 'Akshan': '166', 'Alistar': '12', 'Amumu': '32', 'Anivia': '34', 'Annie': '1', 'Aphelios': '523', 'Ashe': '22', 'AurelionSol': '136', 'Azir': '268', 'Bard': '432', 'Belveth': '200', 'Blitzcrank': '53', 'Brand': '63', 'Braum': '201', 'Caitlyn': '51', 'Camille': '164', 'Cassiopeia': '69', 'Chogath': '31', 'Corki': '42', 'Darius': '122', 'Diana': '131', 'Draven': '119', 'DrMundo': '36', 'Ekko': '245', 'Elise': '60', 'Evelynn': '28', 'Ezreal': '81', 'Fiddlesticks': '9', 'Fiora': '114', 'Fizz': '105', 'Galio': '3', 'Gangplank': '41', 'Garen': '86', 'Gnar': '150', 'Gragas': '79', 'Graves': '104', 'Gwen': '887', 'Hecarim': '120', 'Heimerdinger': '74', 'Illaoi': '420', 'Irelia': '39', 'Ivern': '427', 'Janna': '40', 'JarvanIV': '59', 'Jax': '24', 'Jayce': '126', 'Jhin': '202', 'Jinx': '222', 'Kaisa': '145', 'Kalista': '429', 'Karma': '43', 'Karthus': '30', 'Kassadin': '38', 'Katarina': '55', 'Kayle': '10', 'Kayn': '141', 'Kennen': '85', 'Khazix': '121', 'Kindred': '203', 'Kled': '240', 'KogMaw': '96', 'Leblanc': '7', 'LeeSin': '64', 'Leona': '89', 'Lillia': '876', 'Lissandra': '127', 'Lucian': '236', 'Lulu': '117', 'Lux': '99', 'Malphite': '54', 'Malzahar': '90', 'Maokai': '57', 'MasterYi': '11', 'MissFortune': '21', 'MonkeyKing': '62', 'Mordekaiser': '82', 'Morgana': '25', 'Nami': '267', 'Nasus': '75', 'Nautilus': '111', 'Neeko': '518', 'Nidalee': '76', 'Nilah': '895', 'Nocturne': '56', 'Nunu': '20', 'Olaf': '2', 'Orianna': '61', 'Ornn': '516', 'Pantheon': '80', 'Poppy': '78', 'Pyke': '555', 'Qiyana': '246', 'Quinn': '133', 'Rakan': '497', 'Rammus': '33', 'RekSai': '421', 'Rell': '526', 'Renata': '888', 'Renekton': '58', 'Rengar': '107', 'Riven': '92', 'Rumble': '68', 'Ryze': '13', 'Samira': '360', 'Sejuani': '113', 'Senna': '235', 'Seraphine': '147', 'Sett': '875', 'Shaco': '35', 'Shen': '98', 'Shyvana': '102', 'Singed': '27', 'Sion': '14', 'Sivir': '15', 'Skarner': '72', 'Sona': '37', 'Soraka': '16', 'Swain': '50', 'Sylas': '517', 'Syndra': '134', 'TahmKench': '223', 'Taliyah': '163', 'Talon': '91', 'Taric': '44', 'Teemo': '17', 'Thresh': '412', 'Tristana': '18', 'Trundle': '48', 'Tryndamere': '23', 'TwistedFate': '4', 'Twitch': '29', 'Udyr': '77', 'Urgot': '6', 'Varus': '110', 'Vayne': '67', 'Veigar': '45', 'Velkoz': '161', 'Vex': '711', 'Vi': '254', 'Viego': '234', 'Viktor': '112', 'Vladimir': '8', 'Volibear': '106', 'Warwick': '19', 'Xayah': '498', 'Xerath': '101', 'XinZhao': '5', 'Yasuo': '157', 'Yone': '777', 'Yorick': '83', 'Yuumi': '350', 'Zac': '154', 'Zed': '238', 'Zeri': '221', 'Ziggs': '115', 'Zilean': '26', 'Zoe': '142', 'Zyra': '143'}
         championIds = []
         championsPrio[0] = int(championNames[namee1])
         print(int(championNames[namee1]))
@@ -261,9 +260,13 @@ def start_run():
     setPriority = False
 
     while True:
+        if os.path.exists('configg2.txt') :
+            label2=tk.Label(root, text="参数更改，请重新运行run").place(x=10, y=50, width=800, height=20)
+            exit()
         if championLock :
             if championIdx >= len(championsPrio):
                 championIdx = 0
+
 
         r = request('get', '/lol-gameflow/v1/gameflow-phase')
 
@@ -358,6 +361,14 @@ def start_run():
 
 
 
+def start_run1():
+        T = threading.Thread(target=start_run)
+        T.setDaemon(True)
+        T.start()
+
+
+
+
 
 
 
@@ -374,7 +385,7 @@ def defaultpath():
     else :
         selectPath()
 
-pure_champion_name=['Annie', 'Olaf', 'Galio', 'Twisted Fate', 'Xin Zhao', 'Urgot', 'LeBlanc', 'Vladimir', 'Fiddlesticks', 'Kayle', 'Master Yi', 'Alistar', 'Ryze', 'Sion', 'Sivir', 'Soraka', 'Teemo', 'Tristana', 'Warwick', 'Nunu', 'Miss Fortune', 'Ashe', 'Tryndamere', 'Jax', 'Morgana', 'Zilean', 'Singed', 'Evelynn', 'Twitch', 'Karthus', "Cho'Gath", 'Amumu', 'Rammus', 'Anivia', 'Shaco', 'Dr. Mundo', 'Sona', 'Kassadin', 'Irelia', 'Janna', 'Gangplank', 'Corki', 'Karma', 'Taric', 'Veigar', 'Trundle', 'Swain', 'Caitlyn', 'Blitzcrank', 'Malphite', 'Katarina', 'Nocturne', 'Maokai', 'Renekton', 'Jarvan IV', 'Elise', 'Orianna', 'Wukong', 'Brand', 'Lee Sin', 'Vayne', 'Rumble', 'Cassiopeia', 'Skarner', 'Heimerdinger', 'Nasus', 'Nidalee', 'Udyr', 'Poppy', 'Gragas', 'Pantheon', 'Ezreal', 'Mordekaiser', 'Yorick', 'Akali', 'Kennen', 'Garen', 'Leona', 'Malzahar', 'Talon', 'Riven', "Kog'Maw", 'Shen', 'Lux', 'Xerath', 'Shyvana', 'Ahri', 'Graves', 'Fizz', 'Volibear', 'Rengar', 'Varus', 'Nautilus', 'Viktor', 'Sejuani', 'Fiora', 'Ziggs', 'Lulu', 'Draven', 'Hecarim', "Kha'Zix", 'Darius', 'Jayce', 'Lissandra', 'Diana', 'Quinn', 'Syndra', 'Aurelion Sol', 'Kayn', 'Zoe', 'Zyra', "Kai'Sa", 'Gnar', 'Zac', 'Yasuo', "Vel'Koz", 'Taliyah', 'Camille', 'Braum', 'Jhin', 'Kindred', 'Jinx', 'Tahm Kench', 'Lucian', 'Zed', 'Kled', 'Ekko', 'Vi', 'Aatrox', 'Nami', 'Azir', 'Thresh', 'Illaoi', "Rek'Sai", 'Ivern', 'Kalista', 'Bard', 'Rakan', 'Xayah', 'Ornn', 'Pyke']
+pure_champion_name=['Aatrox', 'Ahri', 'Akali', 'Akshan', 'Alistar', 'Amumu', 'Anivia', 'Annie', 'Aphelios', 'Ashe', 'AurelionSol', 'Azir', 'Bard', 'Belveth', 'Blitzcrank', 'Brand', 'Braum', 'Caitlyn', 'Camille', 'Cassiopeia', 'Chogath', 'Corki', 'Darius', 'Diana', 'Draven', 'DrMundo', 'Ekko', 'Elise', 'Evelynn', 'Ezreal', 'Fiddlesticks', 'Fiora', 'Fizz', 'Galio', 'Gangplank', 'Garen', 'Gnar', 'Gragas', 'Graves', 'Gwen', 'Hecarim', 'Heimerdinger', 'Illaoi', 'Irelia', 'Ivern', 'Janna', 'JarvanIV', 'Jax', 'Jayce', 'Jhin', 'Jinx', 'Kaisa', 'Kalista', 'Karma', 'Karthus', 'Kassadin', 'Katarina', 'Kayle', 'Kayn', 'Kennen', 'Khazix', 'Kindred', 'Kled', 'KogMaw', 'Leblanc', 'LeeSin', 'Leona', 'Lillia', 'Lissandra', 'Lucian', 'Lulu', 'Lux', 'Malphite', 'Malzahar', 'Maokai', 'MasterYi', 'MissFortune', 'MonkeyKing', 'Mordekaiser', 'Morgana', 'Nami', 'Nasus', 'Nautilus', 'Neeko', 'Nidalee', 'Nilah', 'Nocturne', 'Nunu', 'Olaf', 'Orianna', 'Ornn', 'Pantheon', 'Poppy', 'Pyke', 'Qiyana', 'Quinn', 'Rakan', 'Rammus', 'RekSai', 'Rell', 'Renata', 'Renekton', 'Rengar', 'Riven', 'Rumble', 'Ryze', 'Samira', 'Sejuani', 'Senna', 'Seraphine', 'Sett', 'Shaco', 'Shen', 'Shyvana', 'Singed', 'Sion', 'Sivir', 'Skarner', 'Sona', 'Soraka', 'Swain', 'Sylas', 'Syndra', 'TahmKench', 'Taliyah', 'Talon', 'Taric', 'Teemo', 'Thresh', 'Tristana', 'Trundle', 'Tryndamere', 'TwistedFate', 'Twitch', 'Udyr', 'Urgot', 'Varus', 'Vayne', 'Veigar', 'Velkoz', 'Vex', 'Vi', 'Viego', 'Viktor', 'Vladimir', 'Volibear', 'Warwick', 'Xayah', 'Xerath', 'XinZhao', 'Yasuo', 'Yone', 'Yorick', 'Yuumi', 'Zac', 'Zed', 'Zeri', 'Ziggs', 'Zilean', 'Zoe', 'Zyra']
 championLock = False
 
 def getValue():
@@ -392,7 +403,8 @@ def getValue():
     else :
         championLock = True
     print(championLock)
-
+    file = open('configg2.txt', 'w')
+    file.close()
 
 root = Tk()
 root.title("自动确认助手")
@@ -442,7 +454,6 @@ stopWhenMatchStarts = False
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # Helper function
-
 
 
 
